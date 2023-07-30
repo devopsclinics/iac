@@ -20,13 +20,13 @@ resource "aws_instance" "jenkins" {
                 YOURPORT=8080
                 PERM="--permanent"
                 SERV="\$\{PERM} --service=jenkins"
-                sudo firewall-cmd \$\{PERM} --new-service=jenkins
-                sudo firewall-cmd \$\{SERV} --set-short="Jenkins ports"
-                sudo firewall-cmd \$\{SERV} --set-description="Jenkins port exceptions"
-                sudo firewall-cmd \$\{SERV} --add-port=\$\{YOURPORT}/tcp
-                sudo firewall-cmd \$\{PERM} --add-service=jenkins
-                sudo firewall-cmd --zone=public --add-service=http --permanent
-                sudo firewall-cmd --reload
+                # sudo firewall-cmd \$\{PERM} --new-service=jenkins
+                # sudo firewall-cmd \$\{SERV} --set-short="Jenkins ports"
+                # sudo firewall-cmd \$\{SERV} --set-description="Jenkins port exceptions"
+                # sudo firewall-cmd \$\{SERV} --add-port=\$\{YOURPORT}/tcp
+                # sudo firewall-cmd \$\{PERM} --add-service=jenkins
+                # sudo firewall-cmd --zone=public --add-service=http --permanent
+                # sudo firewall-cmd --reload
               EOF
 
   tags = {
