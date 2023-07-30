@@ -5,13 +5,16 @@
 
 name: tfsec
 
+
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - '*'
   pull_request:
-    branches: [ "main" ]
-  schedule:
-    - cron: '31 17 * * 3'
+    branches:
+      - '*'
+  # schedule:
+  #   - cron: '31 17 * * 3'
 
 jobs:
   tfsec:
