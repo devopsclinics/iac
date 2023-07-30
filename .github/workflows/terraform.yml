@@ -8,6 +8,10 @@ on:
   pull_request:
     branches:
       - 'main'
+  workflow_run:
+    workflows: ["tfsec"]
+    types:
+      - completed
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
