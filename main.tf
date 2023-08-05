@@ -25,11 +25,41 @@ resource "aws_instance" "jenkins" {
 
                 
                 # Install Jenkins
-                yum install jenkins -y
+                sudo yum install jenkins -y
                 
                 # Enable and start Jenkins service
-                systemctl enable jenkins
-                systemctl start jenkins
+                sudo systemctl enable jenkins
+                sudo systemctl start jenkins
+
+                #install git
+                sudo yum install git -y
+
+                #install maven
+                sudo yum install maven -y
+
+                #install docker
+                sudo yum install docker -y
+
+                #start docker
+                sudo systemctl start docker
+
+                #enable docker
+                sudo systemctl enable docker
+
+                #add user to docker group
+                sudo usermod -a -G docker jenkins
+
+                # add ec2-user to docker group
+                sudo usermod -a -G docker ec2-user
+                
+                #install docker-compose
+                curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                chmod +x /usr/local/bin/docker-compose
+
+                #install aws cli
+                curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                unzip awscliv2.zip
+                sudo ./aws/install
 
               EOF
 
