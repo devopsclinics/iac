@@ -20,12 +20,9 @@ resource "aws_instance" "jenkins" {
                 # Upgrade packages
                 yum upgrade -y
                 
-                # Check Amazon Linux version and install Java accordingly
-                if grep -q 'Amazon Linux 2' /etc/system-release; then
-                    amazon-linux-extras install java-openjdk11 -y
-                elif grep -q 'Amazon Linux 2023' /etc/system-release; then
-                    dnf install java-11-amazon-corretto -y
-                fi
+                # install java
+                sudo amazon-linux-extras install java-openjdk11 -y
+
                 
                 # Install Jenkins
                 yum install jenkins -y
