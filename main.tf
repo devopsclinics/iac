@@ -8,25 +8,32 @@ resource "aws_instance" "jenkins" {
 
   user_data = <<-EOF
                 #!/bin/bash
-                sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
-                sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
-                sudo yum upgrade -y
-                sudo yum install java-17-openjdk -y
-                sudo yum install jenkins -y
-                sudo systemctl start jenkins
-                sudo systemctl enable jenkins
-                # The following commands set up firewall rules for Jenkins.
-                # Substitute 'YOURPORT' with the port number you want Jenkins to run on.
-                YOURPORT=8080
-                PERM="--permanent"
-                SERV="\$\{PERM} --service=jenkins"
-                # sudo firewall-cmd \$\{PERM} --new-service=jenkins
-                # sudo firewall-cmd \$\{SERV} --set-short="Jenkins ports"
-                # sudo firewall-cmd \$\{SERV} --set-description="Jenkins port exceptions"
-                # sudo firewall-cmd \$\{SERV} --add-port=\$\{YOURPORT}/tcp
-                # sudo firewall-cmd \$\{PERM} --add-service=jenkins
-                # sudo firewall-cmd --zone=public --add-service=http --permanent
-                # sudo firewall-cmd --reload
+                # Update the system
+                yum update -y
+                
+                # Add Jenkins repo
+                wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+                
+                # Import Jenkins-CI key
+                rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+                
+                # Upgrade packages
+                yum upgrade -y
+                
+                # Check Amazon Linux version and install Java accordingly
+                if grep -q 'Amazon Linux 2' /etc/system-release; then
+                    amazon-linux-extras install java-openjdk11 -y
+                elif grep -q 'Amazon Linux 2023' /etc/system-release; then
+                    dnf install java-11-amazon-corretto -y
+                fi
+                
+                # Install Jenkins
+                yum install jenkins -y
+                
+                # Enable and start Jenkins service
+                systemctl enable jenkins
+                systemctl start jenkins
+
               EOF
 
   tags = {
