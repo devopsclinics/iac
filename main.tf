@@ -69,6 +69,69 @@ resource "aws_instance" "jenkins" {
 }
 
 
+resource "aws_instance" "rk2" {
+  ami           = var.web_server_ami
+  instance_type = var.web_server_instance_type
+  key_name      = "MyKeyPair"
+
+  vpc_security_group_ids = [aws_default_security_group.default.id]
+
+  user_data = <<-EOF
+                #!/bin/bash
+                # Update the system
+                yum update -y
+
+                #install rke2
+                curl -sfL https://get.rke2.io | sh -
+
+                #enable and start rke2 service
+                sudo systemctl enable rke2-server.service
+                sudo systemctl start rke2-server.service
+
+              
+                
+                
+      
+                # install java
+                sudo amazon-linux-extras install java-openjdk11 -y
+
+                
+                
+
+                #install git
+                sudo yum install git -y
+
+                #install docker
+                sudo yum install docker -y
+
+                #start docker
+                sudo systemctl start docker
+
+                #enable docker
+                sudo systemctl enable docker
+
+                #add user to docker group
+                sudo usermod -a -G docker jenkins
+
+                # add ec2-user to docker group
+                sudo usermod -a -G docker ec2-user
+                
+                #install docker-compose
+                curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                chmod +x /usr/local/bin/docker-compose
+
+                #install aws cli
+                curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                unzip awscliv2.zip
+                sudo ./aws/install
+
+              EOF
+
+  tags = {
+    Name = "rk2"
+  }
+}
+
 
 # resource "aws_instance" "tomcat" {
 #   ami           = var.web_server_ami
