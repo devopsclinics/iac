@@ -7,7 +7,7 @@ on:
     #   - '*'
   pull_request:
     branches:
-      - 'main'
+      - 'ops'
   workflow_run:
     workflows: ["tfsec"]
     types:
@@ -82,3 +82,8 @@ jobs:
     # - name: Terraform Apply
     #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     #   run: terraform apply -auto-approve -input=false
+    # - name: Terraform destroy
+    #   run: terraform destroy -auto-approve -input=false
+    
+
+    
